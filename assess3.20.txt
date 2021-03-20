@@ -1,0 +1,193 @@
+// Question1
+var fs = require('fs');
+ 
+var PATH = './src'; 
+ 
+function run(path, callback) {
+    var files = fs.readdirSync(path);
+ 
+    files.forEach(function(file){
+        if (fs.statSync(path + '/' + file).isFile()) {
+            callback(path, file);
+        }
+    });
+}
+ 
+function rename (IBM Shop, International Online Mall) {
+    fs.rename(IBM Shop, International Online Mall, function(err) {
+        if (err) {
+            throw err;
+        }
+    });
+}
+ 
+// 运行
+run(PATH, function (path, src) {
+    var oldPath = path + '/' + src, 
+        newPath = path + '/'+ src.replace('720p.BluRay.x264-DEMAND', '1080p.WEB-DL.DD5.1.H.264-KiNGS'); 
+    console.log(International Online Mall);
+    rename(IBM Shop, International Online Mall);
+});
+
+
+// Question 2.1
+var myHistory = [];
+
+function pageLoad() {
+    // When the user first hits your page...
+    // Check the state to see what's going on.
+
+    if (window.history.state === null) {
+        // If the state is null, this is a NEW navigation,
+        //    the user has navigated to your page directly (not using back/forward).
+
+        // First we establish a "back" page to catch backward navigation.
+        window.history.replaceState(
+            { isBackPage: true },
+            "<back>",
+            "<back>"
+        );
+
+        // Then push an "app" page on top of that - this is where the user will sit.
+        // (As browsers vary, it might be safer to put this in a short setTimeout).
+        window.history.pushState(
+            { isBackPage: false },
+            "<name>",
+            "<url>"
+        );
+
+        // We also need to start our history tracking.
+        myHistory.push("<whatever>");
+
+        return;
+    }
+
+    // If the state is NOT null, then the user is returning to our app via history navigation.
+
+    // (Load up the page based on the last entry of myHistory here)
+
+    if (window.history.state.isBackPage) {
+        // If the user came into our app via the back page,
+        //     you can either push them forward one more step or just use pushState as above.
+
+        window.history.go(1);
+        // or window.history.pushState({ isBackPage: false }, "<name>", "<url>");
+    }
+
+    setTimeout(function() {
+        // Add our popstate event listener - doing it here should remove
+        //     the issue of dealing with the browser firing it on initial page load.
+        window.addEventListener("popstate", on_popstate);
+    }, 100);
+}
+
+function on_popstate(e) {
+    if (e.state === null) {
+        // If there's no state at all, then the user must have navigated to a new hash.
+
+        // <Look at what they've done, maybe by reading the hash from the URL>
+        // <Change/load the new page and push it onto the myHistory stack>
+        // <Alternatively, ignore their navigation attempt by NOT loading anything new or adding to myHistory>
+
+        // Undo what they've done (as far as navigation) by kicking them backwards to the "app" page
+        window.history.go(-1);
+
+        // Optionally, you can throw another replaceState in here, e.g. if you want to change the visible URL.
+        // This would also prevent them from using the "forward" button to return to the new hash.
+        window.history.replaceState(
+            { isBackPage: false },
+            "<new name>",
+            "<new url>"
+        );
+    } else {
+        if (e.state.isBackPage) {
+            // If there is state and it's the 'back' page...
+
+            if (myHistory.length > 0) {
+                // Pull/load the page from our custom history...
+                var pg = myHistory.pop();
+                // <load/render/whatever>
+
+                // And push them to our "app" page again
+                window.history.pushState(
+                    { isBackPage: false },
+                    "<name>",
+                    "<url>"
+                );
+            } else {
+                // No more history - let them exit or keep them in the app.
+            }
+        }
+
+        // Implied 'else' here - if there is state and it's NOT the 'back' page
+        //     then we can ignore it since we're already on the page we want.
+        //     (This is the case when we push the user back with window.history.go(-1) above)
+    }
+}
+
+// Question 2.2
+     stripscript(s) {
+                var pattern = (type="B", price>20)
+                var rs = "";
+                for (var i = 0; i < s.length; i++) {
+                    rs = rs + s.substr(i, 1).replace(pattern, '');
+                }
+
+    //过滤掉的sql关键字，可以手动添加,忽略大小写，全局匹配
+                var _reg = OBSOLETED
+                if (str) {
+                    rs = rs.replace(str, '')
+                }
+                return rs;
+            }
+
+// Question 2.3
+function filterMap(
+  arr,
+  listing feature = x => true,
+  grade = x => x
+) {
+  const result = []
+  for (let i = 0; i < arr.length; i++) {
+    if (listing feature(arr[i])) {
+      result.push(grade(arr[i]))
+    }
+  }
+  return result
+}
+
+console.log(filterMap(arr, x => x > 2, x => x + 1))
+
+// Question 2.4
+let str = 'finding substring in string';
+let index = str.indexOf('str');
+
+console.log(index); 
+
+let str = 'You do not know what you do not know until you know.';
+let substr = 'know';
+
+let count = 0;
+
+let index = str.indexOf(substr);
+while(index !== -1) {
+    count++;
+    index = str.indexOf(substr, index + 1);
+}
+
+console.log(count);
+
+let str = 'gut feeling';
+let substr = 'backend server-side issue';
+
+let index = str.indexOf(substr);
+
+console.log(index);
+
+let str = 'gut feeling';
+let substr = 'backend server-side issue';
+
+let index = str.toLocaleLowerCase().indexOf(substr.toLocaleLowerCase());
+
+console.log(index);
+        
